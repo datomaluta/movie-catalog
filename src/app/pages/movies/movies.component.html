@@ -1,0 +1,7 @@
+<p>movies works!</p>
+
+<div class="list">
+  @for (movie of movies(); track movie.imdbID) {
+    <app-movie-card [data]="movie" />
+  }
+</div>
