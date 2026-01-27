@@ -1,6 +1,8 @@
-<div class="card">
-  <img [src]="data().Poster" [alt]="data().Title" (error)="onImageError($event)" />
-  <div>
+<div class="card" (click)="goToDetails(data().imdbID)">
+  <div class="image-container">
+    <img [src]="data().Poster" [alt]="data().Title" (error)="onImageError($event)" />
+  </div>
+  <div class="texts-container">
     <h3>{{ data().Title }}</h3>
     <p>{{ data().Year }}</p>
   </div>

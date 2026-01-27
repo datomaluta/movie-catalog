@@ -11,7 +11,13 @@ export class MovieService {
 
   private http = inject(HttpClient);
 
-  getMovies(search: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}?apikey=${this.apiKey}&s=${search}&type=movie&page=1`);
+  getMovies(search: string, page: number): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}?apikey=${this.apiKey}&s=${search}&type=movie&page=${page}`,
+    );
+  }
+
+  getMoviesById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}?apikey=${this.apiKey}&i=${id}`);
   }
 }

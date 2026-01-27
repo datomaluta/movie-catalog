@@ -2,4 +2,18 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 30px;
+  padding-bottom: 40px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+
+  button {
+    padding: 4px 8px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
 }

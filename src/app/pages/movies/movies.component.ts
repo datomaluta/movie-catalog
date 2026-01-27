@@ -11,6 +11,9 @@ import { MovieType } from '../../models/movie.model';
 })
 export class Movies implements OnInit {
   movies = signal<MovieType[]>([]);
+  loading = signal(false);
+  error = signal('');
+  currentPage = signal(1);
 
   private movieService = inject(MovieService);
 
@@ -19,14 +22,30 @@ export class Movies implements OnInit {
   }
 
   loadMovies() {
-    this.movieService.getMovies('marvel').subscribe({
+    this.loading.set(true);
+    this.movieService.getMovies('mar', this.currentPage()).subscribe({
       next: (data) => {
         this.movies.set(data.Search ?? []);
-        console.log(data);
+
+        if (data.Response === 'False') this.error.set(data.Error);
       },
       error: (err) => {
         console.log(err);
+        this.error.set(err.message);
+      },
+      complete: () => {
+        this.loading.set(false);
       },
     });
+  }
+
+  nextPage() {
+    this.currentPage.set(this.currentPage() + 1);
+    this.loadMovies();
+  }
+
+  previousPage() {
+    this.currentPage.set(this.currentPage() - 1);
+    this.loadMovies();
   }
 }

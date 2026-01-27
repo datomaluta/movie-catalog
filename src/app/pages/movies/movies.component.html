@@ -1,7 +1,19 @@
-<p>movies works!</p>
+@if (loading()) {
+  <p>Loading...</p>
+}
+
+@if (error()) {
+  <p>{{ error() }}</p>
+}
 
 <div class="list">
   @for (movie of movies(); track movie.imdbID) {
     <app-movie-card [data]="movie" />
   }
+</div>
+
+<div class="pagination">
+  <button (click)="previousPage()">Previous</button>
+  <div>{{ currentPage() }}</div>
+  <button (click)="nextPage()">Next</button>
 </div>

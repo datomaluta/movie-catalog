@@ -1,6 +1,9 @@
 header {
   background-color: #44444e;
   padding: 10px 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 
   .content {
     max-width: 1200px;
