@@ -1,9 +1,13 @@
-@if (loading()) {
-  <p>Loading...</p>
-}
-
 @if (error()) {
   <p>{{ error() }}</p>
+}
+
+@if (loading()) {
+  <div class="list">
+    @for (movie of dummyMovies; track movie) {
+      <div class="movie-card-skeleton"></div>
+    }
+  </div>
 }
 
 <div class="list">
@@ -12,8 +16,10 @@
   }
 </div>
 
-<div class="pagination">
-  <button (click)="previousPage()">Previous</button>
-  <div>{{ currentPage() }}</div>
-  <button (click)="nextPage()">Next</button>
-</div>
+@if (!loading()) {
+  <div class="pagination">
+    <button [disabled]="loading()" (click)="previousPage()">Previous</button>
+    <div>{{ currentPage() }}</div>
+    <button [disabled]="loading()" (click)="nextPage()">Next</button>
+  </div>
+}

@@ -1,1 +1,29 @@
-<p>movie-details works!</p>
+@if (loading()) {
+  <p>Loading...</p>
+}
+
+@if (error()) {
+  <p>{{ error() }}</p>
+}
+
+@if (movieData()) {
+  <div class="container">
+    <div class="img-container">
+      <img src="{{ movieData()?.Poster }}" alt="{{ movieData()?.Title }}" />
+    </div>
+    <div class="texts-container">
+      <h2>{{ movieData()?.Title }} ({{ movieData()?.Year }})</h2>
+      <p>{{ movieData()?.Plot }}</p>
+      <p><span>Runtime:</span> {{ movieData()?.Runtime }}</p>
+      <p><span>Released:</span> {{ movieData()?.Released }}</p>
+      <p><span>Director:</span> {{ movieData()?.Director }}</p>
+      <p><span>Writer:</span> {{ movieData()?.Writer }}</p>
+      <p><span>Actors:</span> {{ movieData()?.Actors }}</p>
+      <p><span>Language:</span> {{ movieData()?.Language }}</p>
+      <p><span>Country:</span> {{ movieData()?.Country }}</p>
+      <p><span>Awards:</span> {{ movieData()?.Awards }}</p>
+      <p><span>IMDB Rating:</span> {{ movieData()?.imdbRating }}</p>
+      <p><span>IMDB Votes:</span> {{ movieData()?.imdbVotes }}</p>
+    </div>
+  </div>
+}

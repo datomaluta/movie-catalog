@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { MovieCard } from '../../components/movie-card/movie-card.component';
 import { MovieService } from '../../services/movie.service';
 import { MovieType } from '../../models/movie.model';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-movies',
@@ -16,14 +17,20 @@ export class Movies implements OnInit {
   currentPage = signal(1);
 
   private movieService = inject(MovieService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   ngOnInit(): void {
-    this.loadMovies();
+    this.route.queryParams.subscribe((params) => {
+      const page = Number(params['page']) || 1;
+      this.currentPage.set(page);
+      this.loadMovies();
+    });
   }
 
   loadMovies() {
     this.loading.set(true);
-    this.movieService.getMovies('mar', this.currentPage()).subscribe({
+    this.movieService.getMovies('new', this.currentPage()).subscribe({
       next: (data) => {
         this.movies.set(data.Search ?? []);
 
@@ -40,12 +47,23 @@ export class Movies implements OnInit {
   }
 
   nextPage() {
-    this.currentPage.set(this.currentPage() + 1);
-    this.loadMovies();
+    window.scrollTo({ behavior: 'smooth', top: 0 });
+    this.updatePage(this.currentPage() + 1);
   }
 
   previousPage() {
-    this.currentPage.set(this.currentPage() - 1);
-    this.loadMovies();
+    if (this.currentPage() === 1) return;
+    window.scrollTo({ behavior: 'smooth', top: 0 });
+    this.updatePage(this.currentPage() - 1);
   }
+
+  private updatePage(page: number) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  dummyMovies = Array.from({ length: 10 });
 }

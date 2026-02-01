@@ -1,5 +1,5 @@
 import { Component, inject, input, OnInit, signal } from '@angular/core';
-import { MovieType } from '../../models/movie.model';
+import { MovieDetailsType, MovieType } from '../../models/movie.model';
 import { MovieService } from '../../services/movie.service';
 
 @Component({
@@ -9,7 +9,9 @@ import { MovieService } from '../../services/movie.service';
   styleUrl: './movie-details.component.scss',
 })
 export class MovieDetails implements OnInit {
-  movieData = signal<MovieType | null>(null);
+  movieData = signal<MovieDetailsType | null>(null);
+  loading = signal(false);
+  error = signal('');
   id = input.required<string>();
   private movieService = inject(MovieService);
 
@@ -18,10 +20,16 @@ export class MovieDetails implements OnInit {
   }
 
   loadMovieData() {
+    this.loading.set(true);
     this.movieService.getMoviesById(this.id()).subscribe({
       next: (data) => {
-        console.log(data);
-        // this.movieData.set()
+        this.movieData.set(data);
+      },
+      error: () => {
+        this.error.set('Something went wrong');
+      },
+      complete: () => {
+        this.loading.set(false);
       },
     });
   }
