@@ -1,4 +1,4 @@
-<div class="search-container">
+<div class="search-container" #searchBox>
   <div class="input-container">
     <svg xmlns="http://www.w3.org/2000/svg" class="ionicon search-icon" viewBox="0 0 512 512">
       <path
@@ -23,12 +23,32 @@
       (ngModelChange)="liveSuggestion($event)"
     />
   </div>
-  <div class="suggestions">
-    @for (item of suggestions(); track item.imdbID) {
-      <div class="suggestion-movie-card">
-        <img [src]="item.Poster" [alt]="item.Title" />
-        <p>{{ item.Title }} ({{ item.Year }})</p>
-      </div>
-    }
-  </div>
+
+  @if (searchString.length > 0) {
+    <div class="suggestions">
+      @if (searchString.length > 0 && searchString.length < 3 && !loading() && !hasSearched()) {
+        Enter at least 3 characters
+      }
+
+      @if (loading()) {
+        Loading...
+      }
+
+      @if (suggestions().length === 0 && searchString.length >= 3 && !loading() && hasSearched()) {
+        No results found
+      }
+
+      @if (suggestions().length > 0) {
+        @for (item of suggestions(); track item.imdbID) {
+          <div
+            class="suggestion-movie-card"
+            (click)="$event.stopPropagation(); goToDetails(item.imdbID)"
+          >
+            <img [src]="item.Poster" [alt]="item.Title" (error)="onImageError($event)" />
+            <p>{{ item.Title }} ({{ item.Year }})</p>
+          </div>
+        }
+      }
+    </div>
+  }
 </div>
