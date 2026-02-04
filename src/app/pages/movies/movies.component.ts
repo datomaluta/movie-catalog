@@ -15,6 +15,7 @@ export class Movies implements OnInit {
   loading = signal(false);
   error = signal('');
   currentPage = signal(1);
+  searchString = signal('')
 
   private movieService = inject(MovieService);
   private route = inject(ActivatedRoute);
@@ -23,6 +24,8 @@ export class Movies implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       const page = Number(params['page']) || 1;
+      const search  = params['search'] || 'new';
+      this.searchString.set(search);
       this.currentPage.set(page);
       this.loadMovies();
     });
@@ -30,7 +33,7 @@ export class Movies implements OnInit {
 
   loadMovies() {
     this.loading.set(true);
-    this.movieService.getMovies('new', this.currentPage()).subscribe({
+    this.movieService.getMovies(this.searchString(), this.currentPage()).subscribe({
       next: (data) => {
         this.movies.set(data.Search ?? []);
 

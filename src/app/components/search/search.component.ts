@@ -21,6 +21,7 @@ export class Search {
   hasSearched = signal(false);
 
   suggestions = signal<MovieType[]>([]);
+  hasShowMore = signal(false);
 
   constructor() {
     this.search$
@@ -31,6 +32,7 @@ export class Search {
           if (text.length < 3) {
             this.suggestions.set([]);
             this.hasSearched.set(false);
+            this.hasShowMore.set(false);
             return [];
           }
 
@@ -41,6 +43,8 @@ export class Search {
       )
       .subscribe((data) => {
         this.suggestions.set(data.Search ?? []);
+        console.log(data.totalResults);
+        if (data.totalResults > 10) this.hasShowMore.set(true);
         this.loading.set(false);
       });
   }
@@ -80,5 +84,16 @@ export class Search {
   closeSuggestions() {
     this.searchString = '';
     this.suggestions.set([]);
+    this.hasShowMore.set(false);
+  }
+
+  showMore() {
+    this.router.navigate(['/'], {
+      queryParams: {
+        search: this.searchString,
+        page: 1,
+      },
+    });
+    this.closeSuggestions();
   }
 }

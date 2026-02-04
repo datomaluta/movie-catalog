@@ -49,6 +49,9 @@
           </div>
         }
       }
+      @if (hasShowMore()) {
+        <button class="show-more" (click)="showMore()">Show more results</button>
+      }
     </div>
   }
 </div>
